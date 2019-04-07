@@ -1,0 +1,61 @@
+<!--index.wxml-->
+<import src="../../styles/templates.wxml"/>
+<template is="tabbar" data="{{activeIndex: 0}}"/>
+<view wx:if="{{result.superbanner}}">
+	<form bindsubmit='btnJump' data-url="{{result.superbanner.url}}" report-submit>
+		<button form-type='submit' plain='true' plain='plain' style='border:none;padding:0px;border-radius:0px;margin:0px;line-height:0px;'><image src='{{result.superbanner.image}}' mode='widthFix' style='width:100%;margin:0px;'></image></button>
+	</form>
+</view>
+<view wx:if="{{result.recommends.length>0}}">
+	<view style='display:flex;justify-content: space-between;'>
+		<view style='padding:0px 10px;font-size:14px;height: 30px;line-height: 30px;color:#FF5500;'><text class='iconfont icon-hotfill' style='font-size:14px;margin-right:5px;'></text>精品大奖</view>
+		<view style='height: 30px;line-height: 30px;'>
+			<button open-type='share' style='height: 30px;line-height: 30px;font-size:12px;color:#0099ee;border:none;' plain='plain'>分享给朋友<text class='iconfont icon-pullup' style='font-size:12px;margin-left:5px;'></text></button>
+		</view>
+	</view>
+	<swiper autoplay="true" circular="true" style='height:329px;'>
+  <block wx:for="{{result.recommends}}">
+    <swiper-item>
+			<navigator url='/pages/luckydraw/detail?id={{item.id}}'>
+      <template is="luckydrawCard" data="{{...item}}"/>
+			</navigator>
+    </swiper-item>
+  </block>
+</swiper>
+	
+</view>
+<view style='display:flex;justify-content: space-between;padding:5px 10px;'>
+  <view style='font-size:14px;height: 30px;line-height: 30px;color:#FF5500;'><text class='iconfont icon-sponsorfill' style='font-size:14px;margin-right:5px;'></text>已送出奖品</view>
+	<view style='font-size:18px;flex:1;text-align: right;height: 30px;line-height: 30px;color:#FF5500;'>{{showtotalawards}}<text style='font-size:12px;'>份</text></view>
+</view>
+<view style='display:flex;flex-wrap: wrap;justify-content: space-between;font-size:14px;padding:0px 10px;'>
+	<!-- <view bindtap='btnMap' style="box-shadow:0px 2px 5px #ccc;flex:1;height:80px;line-height: 80px;margin-right: 10px;background: #FF5500;text-align: center;border-radius: 6px;color:#fff;">附近抽奖</view>
+	<view bindtap='btnList' style="box-shadow:0px 2px 5px #ccc;flex:1;height:80px;line-height: 80px;background: #33cc33;text-align: center;border-radius: 6px;color:#fff;">全部抽奖</view> -->
+	<block wx:for="{{result.squaremenus}}">
+		<form bindsubmit="btnJump" data-url="{{item.url}}" report-submit style='border:none;border-radius: 6px;width:49%;height:80px;box-shadow:0px 2px 5px #ccc;margin-bottom:8px;background-color:transparent;'>
+			<button form-type='submit' plain='true' style="border:none;background-image: url('{{item.backgroundImage}}');background-size: cover;background-position: center;background-repeat: no-repeat;width:100%;height:100%;line-height: 80px;font-size:14px;background:{{item.background?item.background:''}};text-align: center;color:{{item.color?item.color:'#fff'}};">{{item.name}}</button>
+		</form>
+	</block>
+</view>
+<!-- <view style='display:flex;justify-content: space-between;font-size:14px;padding:0px 10px;'>
+	<view bindtap='btnRank' style="box-shadow:0px 2px 5px #ccc;flex:1;height:80px;line-height: 80px;margin-right: 10px;background: #0099ee;text-align: center;border-radius: 6px;color:#fff;">RP排行</view>
+	<view bindtap='btnMyWallet' style="box-shadow:0px 2px 5px #ccc;flex:1;height:80px;line-height: 80px;background: #e6c033;text-align: center;border-radius: 6px;color:#fff;">领取RP币</view>
+</view> -->
+<view style='margin-top:0px;'>
+	<view style='display:flex;justify-content: space-between;'>
+		<view style='padding:0px 10px;font-size:14px;height: 30px;line-height: 30px;color:#FF5500;'><text class='iconfont icon-countdownfill' style='font-size:14px;margin-right:5px;'></text>即将开奖</view>
+		<view style='height: 30px;line-height: 30px;'>
+			<button open-type='share' style='height: 30px;line-height: 30px;font-size:12px;color:#0099ee;border:none;' plain='plain'>分享给朋友<text class='iconfont icon-pullup' style='font-size:12px;margin-left:5px;'></text></button>
+		</view>
+	</view>
+	<block wx:for="{{result.opensoons}}">
+			<navigator url='/pages/luckydraw/detail?id={{item.id}}' style='margin-bottom:10px;'>
+      <template is="luckydrawCard" data="{{...item}}"/>
+			</navigator>
+  </block>
+</view>
+<view style='display:flex;justify-content: space-between;font-size:12px;padding:20px;color:#0099ee;'>
+	<view bindtap='btnCooperation' style="flex:1;text-align: right;">成为赞助商</view>
+	<view style="padding:0px 10px;">|</view>
+	<view bindtap='btnQNA' style="flex:1;text-align: left;">常见问题</view>
+</view>

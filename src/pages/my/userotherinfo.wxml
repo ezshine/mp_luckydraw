@@ -1,0 +1,22 @@
+<!--pages/my/userotherinfo.wxml-->
+<import src="../../styles/templates.wxml"/>
+<view style='padding:10px;background:#fff;margin-bottom:10px;'>
+	<view style='padding:10px;background:#f2f2f2;border:1px solid #ccc;font-size:12px;'>部分抽奖可能需要您提供一些其他信息，不填写可能导致无法领奖，请根据抽奖的说明填写添加。</view>
+</view>
+<view>
+	<block wx:for="{{optiondetail}}">
+		<view class='weui-flex cell' style='margin-bottom:0px;'>
+	    	<view class='celllabel'><input disabled='disabled' type='text' placeholder='字段名' style='width:80px;border:1px solid #ccc;padding:0px 5px;' value="{{item.key}}"/></view>
+			<view class='weui-flex__item cellcontent' style='margin-left:5px;text-align:left;'><input disabled='disabled' type='text' placeholder='字段内容' style='border:1px solid #ccc;padding:0px 5px;' value="{{item.value}}"/></view>
+			<view id='{{index}}' class='cellsuffix' bindtap='btnRemove'><text style='padding:3px 6px;font-size:12px;background:#FF5500;color:#fff;border-radius:4px;'>删除</text></view>
+		</view>
+	</block>
+	<view class='weui-flex cell' style='margin-bottom:0px;'>
+    <view class='celllabel'><input bindinput='keyInput' value='{{tempKey}}' type='text' placeholder='字段名' style='width:80px;border:1px solid #ccc;padding:0px 5px;'/></view>
+		<view class='weui-flex__item cellcontent' style='margin-left:5px;text-align:left;'><input bindinput='valueInput' value='{{tempValue}}' type='text' placeholder='字段内容' style='border:1px solid #ccc;padding:0px 5px;'/></view>
+		<view class='cellsuffix' bindtap='btnAddOption'><text style='padding:3px 6px;font-size:12px;background:#0099ee;color:#fff;border-radius:4px;'>添加</text></view>
+	</view>
+</view>
+<view style='padding:30px 10px;'>
+	<view bindtap='btnSave' class='blockbutton blue'>保存</view>
+</view>

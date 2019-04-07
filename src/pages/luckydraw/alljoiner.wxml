@@ -1,0 +1,46 @@
+<!--pages/luckydraw/alljoiner.wxml-->
+<import src="../../styles/templates.wxml"/>
+<view class="weui-search-bar" style="background:#fff;border:none;width:100%;">
+  <view class="weui-search-bar__form">
+    <view class="weui-search-bar__box">
+      <icon class="weui-icon-search_in-box" type="search" size="14"></icon>
+      <input type="text" class="weui-search-bar__input" placeholder="用户昵称关键字" value="{{inputVal}}" focus="{{inputShowed}}" bindinput="inputTyping" />
+      <view class="weui-icon-clear" wx:if="{{inputVal.length > 0}}" bindtap="clearInput">
+        <icon type="clear" size="14"></icon>
+      </view>
+    </view>
+    <label class="weui-search-bar__label" hidden="{{inputShowed}}" bindtap="showInput">
+				<icon class="weui-icon-search" type="search" size="14"></icon>
+				<view class="weui-search-bar__text">输入昵称查询</view>
+		</label>
+  </view>
+  <view class="weui-search-bar__cancel-btn" hidden="{{!inputShowed}}" bindtap="hideInput">取消</view>
+</view>
+<view class='tabmenu' style='padding:10px;'>
+	<view bindtap='btnChangeTab' data-type='0' class="tab left {{type==0?'active':''}}">倒序</view>
+	<view bindtap='btnChangeTab' data-type='1' class="tab center {{type==1?'active':''}}">顺序</view>
+	<view bindtap='btnChangeTab' data-type='2' class="tab right {{type==2?'active':''}}">只看中奖</view>
+</view>
+<view style=''>
+	<block wx:for="{{list}}">
+		<view style='display:flex;justify-content: space-between;padding:10px;background: #fff;'>
+        <view style='width:40px;height:40px;'>
+					<image src="{{item.userInfo.headimg}}" style='width:40px;height:40px;border-radius: 20px;' mode='aspectFill' background-size='cover'></image>
+        </view>
+				<view style='flex:1;margin-left:5px;'>
+					<view style="display:flex;justify-content: space-between;">
+						<view style="font-size: 14px;color:#000;text-overflow: ellipsis;white-space: nowrap;overflow: hidden;">{{item.userInfo.nickname}}</view>
+						<view style="margin-left:5px;font-size: 12px;color:#999;height:24px;line-height:24px;flex:1;text-align:right;"><text wx:if="{{item.msg!=''}}" bindtap='showMsgTips' data-msgtips='{{item.msgtips}}' style='color:#ff5500;'><text class='iconfont icon-info' style='font-size:12px;'></text>{{item.msg}}</text></view>
+					</view>
+					<view style="display:flex;justify-content: space-between;">
+						<view wx:if='{{item.getaward==1}}' style="font-size: 12px;color:#ff3366;"><text class='iconfont icon-crownfill' style='font-size: 12px;margin-right:5px;'></text>恭喜中奖</view>
+						<view style="font-size: 12px;color:#ccc;flex:1;text-align:right;">{{item.createdate}}</view>
+					</view>
+				</view>
+    </view>
+    <template is='divider' />
+	</block>
+	<view bindtap="btnLoadMore" wx:if="{{canloadmore}}" style="width:100%;font-size:16px;color:#999;text-align:center;padding:10px;">
+		点击加载更多
+	</view>
+</view>

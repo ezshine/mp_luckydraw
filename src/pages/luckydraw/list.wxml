@@ -1,0 +1,15 @@
+<import src="../../styles/templates.wxml"/>
+<view class='tabmenu' style='padding:10px;'>
+	<view bindtap='btnChangeTab' data-type='3' class="tab left {{type==3?'active':''}}">{{orderTypeStr[0]}}</view>
+	<view bindtap='btnChangeTab' data-type='4' class="tab right {{type==4?'active':''}}">{{orderTypeStr[1]}}</view>
+</view>
+<view style='padding:10px 0px;'>
+	<block wx:for="{{list}}">
+		<navigator url='/pages/luckydraw/detail?id={{item.id}}' style='margin-bottom:10px;'>
+			<template is='luckydrawCardSmall' data='{{...item}}'/>
+		</navigator>
+	</block>
+	<view bindtap="btnLoadMore" wx:if="{{canloadmore}}" style="width:100%;font-size:16px;color:#999;text-align:center;padding:10px;">
+		点击加载更多
+	</view>
+</view>

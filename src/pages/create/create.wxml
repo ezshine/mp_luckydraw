@@ -1,0 +1,128 @@
+<!--pages/create/create.wxml-->
+<import src="../../styles/templates.wxml"/>
+<view wx:if="{{showPasswordEditor}}" style='width:100%;height:100%;position:fixed;z-index:9;background:#f2f2f2;overflow:hidden;'>
+		<view style='padding:10px;background:#fff;margin-top:10px;'>
+			<input type='number' maxlength='12' value="{{advPassword}}" bindinput='inputAdvPassword' style='text-align:center;box-sizing:border-box;padding:0px 10px;width:100%;background:#fff;height:60px;line-hieght:60px;font-size:16px;' placeholder='输入口令，仅限数字'></input>
+			<template is="divider" />
+			<textarea fixed="true" value="{{advPasswordTips}}" bindinput='inputAdvPasswordTips' style='box-sizing:border-box;width:100%;height:100px;font-size:14px;padding:20px 10px;background:#fff;' maxlength='50' placeholder='口令提示，例如：请关注‘某某‘公众号，即可获得抽奖口令。'></textarea>
+		</view>
+		<view style='padding:20px 10px;display:flex;'>
+				<view class='blockbutton gray' bindtap='btnClearAdvPassword' style='margin-top:20px;margin-right:10px;'>清空返回</view>
+				<view class='blockbutton yellow' bindtap='btnSaveAdvPassword' style='margin-top:20px;'>保存</view>
+			</view>
+</view>
+<view hidden='{{showPasswordEditor}}'>
+  <text bindtap='btnChangeCover' style='padding:4px 8px;background:#fff;border:1px solid #ccc;position:absolute;right:10px;top:10px;font-size:12px;'>更换奖品图片</text>
+  <image src="{{awardImage==''?'../../images/defaultawardimage.jpg':awardImage}}" mode='aspectFill' background-size='cover' style='width:100%;'></image>
+  <view class='weui-flex cell' style='margin-bottom:0px;'>
+    <view class='celllabel'>奖品名称</view>
+    <view class='weui-flex__item cellcontent'><input bindinput='inputAwardName' value='{{awardName}}' type='text' maxlength='20' placeholder='请输入奖品名称' style='height:40px;line-height:40px;'/></view>
+    <view class='cellsuffix'></view>
+  </view>
+  <template is='divider'/>
+  <view class='weui-flex cell' style='margin-bottom:0px;'>
+    <view class='celllabel'>奖品数量</view>
+    <view class='weui-flex__item cellcontent'><input bindinput='inputAwardNum' value='{{awardNum}}' type='number' maxlength='3' placeholder='数量' style='height:40px;line-height:40px;'/></view>
+    <view class='cellsuffix'>个</view>
+  </view>
+  <template is='divider'/>
+  <view style='background: #fff;padding:10px;'>
+    <view style='font-size: 14px;'>抽奖说明<text style='font-size: 12px;margin-left: 5px;color:#ccc;'>可将文字做在图里，最多{{maxfile}}张</text></view>
+    <view class="weui-uploader" style='margin-top: 5px;'>
+      <view class="weui-uploader__bd">
+        <view class="weui-uploader__files" id="uploaderFiles">
+          <block wx:for="{{files}}" wx:key="*this">
+            <view class="weui-uploader__file" bindtap="previewImage" id="img_{{index}}">
+              <image class="weui-uploader__img" src="{{item}}" mode="aspectFill" />
+            </view>
+          </block>
+        </view>
+        <view wx:if="{{files.length<maxfile}}" class="weui-uploader__input-box">
+            <view class="weui-uploader__input" bindtap="chooseImage"></view>
+        </view>
+      </view>
+    </view>
+  </view>
+  <view class='weui-flex' style='padding:5px 10px;line-height:40px;margin-bottom:0px;'>
+    <view class='' style='font-size:12px;height:40px;color:#999;'>{{openTypeDescs[openType]}}</view>
+    <view class='weui-flex__item' style='font-size:12px;height:40px;margin-left:10px;text-align:right;'></view>
+    <view bindtap='btnChangeOpenType' style='font-size:12px;height:40px;margin-left:5px;text-align:right;color:#0099ee;'>修改开奖方式<text class='iconfont icon-right' style='font-size:12px;'></text></view>
+  </view>
+  <view wx:if="{{openType==0}}" class='weui-flex cell clickable' style='margin-bottom:0px;'>
+    <view class='celllabel'>开奖时间</view>
+    <view class='weui-flex__item cellcontent'>
+      <picker mode="multiSelector" bindchange="pickerDateChange" value="{{pickerDateIndexs}}" range="{{pickerDates}}"><text style='font-size:12px;color:#999;'>{{pickerDates[0][pickerDateIndexs[0]]}} {{pickerDates[1][pickerDateIndexs[1]]}}:{{pickerDates[2][pickerDateIndexs[2]]}}</text></picker>
+    </view>
+    <view class='cellsuffix'><text class='iconfont icon-right'></text></view>
+  </view>
+  <view wx:elif="{{openType==1}}" class='weui-flex cell' style='margin-bottom:0px;'>
+    <view class='celllabel'>开奖人数</view>
+    <view class='weui-flex__item cellcontent'><input type='number' bindinput='inputOpenNeedUsers' value="{{openNeedUsers}}" placeholder='人数' maxlength="5" style='height:40px;line-height:40px;'/></view>
+    <view class='cellsuffix'>人</view>
+  </view>
+  <view wx:elif="{{openType==2}}" class='weui-flex cell' style='margin-bottom:0px;'>
+    <view class='celllabel' style='color:#ccc;'>由发起人手动开奖</view>
+    <view class='weui-flex__item cellcontent'></view>
+    <view class='cellsuffix'></view>
+  </view>
+	<view class='weui-flex cell' style='margin-top:10px;'>
+    <view class='celllabel'>高级设置</view>
+    <view class='weui-flex__item cellcontent'></view>
+    <view class='cellsuffix'><switch bindchange='btnShowAdvance' checked='{{showAdvance}}'></switch></view>
+  </view>
+	<view wx:if="{{showAdvance}}">
+		<view style='font-size:12px;padding:10px;color:#999;'>部分高级设置可能导致参与人数和传播力的明显下降，但可以获得更加精准的参与者。</view>
+		<view class='weui-flex cell clickable' style='margin-bottom:0px;'>
+			<view class='celllabel' bindtap='btnTips' data-tips='公开抽奖将在“全部抽奖”和“附近抽奖”中显示，私密则仅限收到发起人或其他参与者的分享后方可参与。'>公开抽奖<text class='iconfont icon-info' style='margin-left:5px;font-size:12px;color: #0099ee;'></text></view>
+    	<view class='weui-flex__item cellcontent' bindtap='btnAdvIsPublic'>{{advIsPublic==0?"私密":"公开"}}</view>
+    	<view class='cellsuffix' bindtap='btnAdvShare'><text class='iconfont icon-right'></text></view>
+		</view>
+		<template is='divider' />
+		<view class='weui-flex cell clickable' style='margin-bottom:0px;'>
+			<view class='celllabel' bindtap='btnTips' data-tips='开启裂变分享，参与者每邀请一个好友成功参加都可提升近1倍中奖率。'>裂变分享<text class='iconfont icon-info' style='margin-left:5px;font-size:12px;color: #0099ee;'></text></view>
+    	<view class='weui-flex__item cellcontent' bindtap='btnAdvShare'>{{advShare==0?"关闭":"开启"}}</view>
+    	<view class='cellsuffix' bindtap='btnAdvShare'><text class='iconfont icon-right'></text></view>
+		</view>
+		<template is='divider' />
+		<view class='weui-flex cell clickable' style='margin-bottom:0px;'>
+			<view class='celllabel' bindtap='btnTips' data-tips='只有输入正确的口令方可参与抽奖，适用场景：引导参与者关注公众号，由公众号下发口令。'>参与口令<text class='iconfont icon-info' style='margin-left:5px;font-size:12px;color: #0099ee;'></text></view>
+    	<view class='weui-flex__item cellcontent' bindtap='btnShowPasswordEditor'>{{advPassword==""?"无":advPassword}}</view>
+    	<view class='cellsuffix' bindtap='btnShowPasswordEditor'><text class='iconfont icon-right'></text></view>
+		</view>
+		<template is='divider' />
+		<view class='weui-flex cell clickable' style='margin-bottom:0px;'>
+			<view class='celllabel' bindtap='btnTips' data-tips='只有在指定地点指定范围内方可参与抽奖，启用后将在地图上显示。适用场景：O2O周边服务。'>限定地点<text class='iconfont icon-info' style='margin-left:5px;font-size:12px;color: #0099ee;'></text></view>
+			<view class='weui-flex__item cellcontent' bindtap='btnChooseAdvLocation' style='font-size:12px;color:#999;text-overflow: ellipsis;overflow:hidden;white-space: nowrap;text-align:left;'>{{advGPSCity==""?"选择地点":advGPSCity+advGPSAddr}}</view>
+			<view class='cellsuffix' bindtap='btnChangeAdvDistance'>{{advDistanceTypeStr[advDistanceType]}}<text class='iconfont icon-right' style='margin-left: 5px;'></text></view>
+		</view>
+		<template is='divider' />
+		<view class='weui-flex cell clickable' style='margin-bottom:0px;'>
+			<view class='celllabel' bindtap='btnTips' data-tips='指定参与者性别，适用场景：特定性别方可使用的服务或商品。'>限定性别<text class='iconfont icon-info' style='margin-left:5px;font-size:12px;color: #0099ee;'></text></view>
+			<view class='weui-flex__item cellcontent' bindtap='btnChangeAdvGender'>{{advGenderTypeStr[advGenderType]}}</view>
+			<view class='cellsuffix' bindtap='btnChangeAdvGender'><text class='iconfont icon-right'></text></view>
+		</view>
+    <template is='divider' />
+    <view class='weui-flex cell clickable' style='margin-bottom:0px;'>
+      <view class='celllabel' bindtap='btnTips' data-tips='要求参与者扫描指定商品的条码方可参与，适用场景：新商品上市活动。'>条码解锁<text class='iconfont icon-info' style='margin-left:5px;font-size:12px;color: #0099ee;'></text></view>
+      <view class='weui-flex__item cellcontent' bindtap='btnScanAdvBarcode'>{{advBarCode==""?"无":advBarCode}}</view>
+      <view class='cellsuffix' bindtap='btnScanAdvBarcode'><text class='iconfont icon-right'></text></view>
+    </view>
+		<template is='divider' />
+		<view class='weui-flex cell clickable' style='margin-bottom:0px;'>
+			<view class='celllabel' bindtap='btnTips' data-tips='RP币可以作为用户是否活跃的特征，可一定程度排除羊毛党。'>RP币余额<text class='iconfont icon-info' style='margin-left:5px;font-size:12px;color: #0099ee;'></text></view>
+			<view class='weui-flex__item cellcontent'><input type='number' bindinput='inputAdvCoinBottom' value='{{advCoinBottom}}' placeholder='数量' style='height:40px;line-height:40px;'/></view>
+			<view class='cellsuffix'>枚以上</view>
+		</view>
+		<template is='divider' />
+		<view class='weui-flex cell' style='margin-bottom:0px;'>
+			<view class='celllabel' bindtap='btnTips' data-tips="在‘我的’栏目下点编辑资料，可自由添加资料字段和内容，适用场景：基本资料不满足发放奖品时。">必备资料<text class='iconfont icon-info' style='margin-left:5px;font-size:12px;color: #0099ee;'></text></view>
+    	<view class='weui-flex__item cellcontent'><input bindinput='inputAdvNeedInfoKey' value='{{advNeedInfoKey}}' type='text' placeholder='请输入字段名' style='height:40px;line-height:40px;'/></view>
+    	<view class='cellsuffix'></view>
+		</view>
+	</view>
+  <view style='padding:30px 10px;'>
+		<button wx:if='{{!userInfo}}' plain='plain' style='border:none;width:100%;padding:0px;' open-type="getUserInfo" bindgetuserinfo="bindGetUserInfo"><view class='blockbutton yellow'>授权登录</view></button>
+    <view wx:else class='blockbutton red' bindtap='btnSubmit'>发起新抽奖</view>
+  </view>
+	
+</view>

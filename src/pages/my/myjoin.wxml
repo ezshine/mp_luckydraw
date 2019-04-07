@@ -1,0 +1,13 @@
+<!--pages/my/mypost.wxml-->
+<import src="../../styles/templates.wxml"/>
+<view>
+	<block wx:for="{{list}}">
+		<navigator url='/pages/luckydraw/detail?id={{item.id}}' style='margin-bottom:10px;'>
+			<template is='luckydrawCardSmall' data='{{...item}}'/>
+		</navigator>
+		<template is='divider'/>
+	</block>
+	<view bindtap="btnLoadMore" wx:if="{{canloadmore}}" style="width:100%;font-size:16px;color:#999;text-align:center;padding:10px;">
+		点击加载更多
+	</view>
+</view>

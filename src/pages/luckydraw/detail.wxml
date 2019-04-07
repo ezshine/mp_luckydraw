@@ -1,0 +1,178 @@
+<!--pages/luckydraw/detail.wxml-->
+<import src="../../styles/templates.wxml"/>
+<view wx:if="{{showShareMenu}}" style='width:100%;height:100%;position:fixed;z-index:9;background:rgba(0,0,0,.3);overflow:hidden;'>
+	<view class='ezasheet'>
+		<button class='ezasheetitem' plain='plain' bindtap='btnHideShareMenu' open-type='share' style='border:none;padding:0;background:#fff;'>邀请微信好友</button>
+		<template is='divider' />
+		<view class='ezasheetitem' bindtap='showShareImage'>生成分享图片</view>
+		<view bindtap='btnHideShareMenu' class='ezasheetitem' style='margin-top:5px;'>取消</view>
+	</view>
+</view>
+<view wx:if="{{showPasswordInput}}" style='width:100%;height:100%;position:fixed;z-index:9;background:#f2f2f2;overflow:hidden;'>
+	<view style='padding:10px;background:#fff;'>
+		<text selectable="true" style='font-size:14px;color:#ff3366;'>
+			{{result.advpasswordtips}}
+		</text>
+		<input type='number' auto-focus='true' maxlength='12' value="{{passwordResult}}" bindinput='inputAdvPassword' style='box-sizing:border-box;margin-top:10px;text-align:center;width:100%;background:#fff;height:60px;line-height:60px;font-size:18px;padding:0px 10px;border:1px solid #ccc;' placeholder='输入口令解锁抽奖'></input>
+	</view>
+	<view style='padding:20px 10px;display:flex;'>
+		<view class='blockbutton gray' bindtap='btnClearAdvPassword' style='margin-right:10px;'>取消</view>
+    <view class='blockbutton yellow' bindtap='btnSaveAdvPassword' style=''>解锁抽奖</view>
+  </view>
+</view>
+<view wx:if="{{showMap}}" style='width:100%;height:100%;position:fixed;z-index:9;background:#f2f2f2;overflow:hidden;'>
+	<map id="map" longitude="{{centerLng}}" latitude="{{centerLat}}" scale="10" markers='{{markers}}' circles='{{circles}}' show-location="true" style="width: 100%; height: 300px;"></map>
+	<view style='padding:20px 10px;display:flex;'>
+		<view class='blockbutton gray' bindtap='btnCancelMap' style='margin-right:10px;'>取消</view>
+    <view class='blockbutton yellow' bindtap='btnCheckGPS' style=''>解锁抽奖</view>
+  </view>
+</view>
+<view hidden="{{showPasswordInput||showMap}}">
+<view style='position:fixed;z-index:2;bottom:0;display:flex;justify-content: space-around;padding:10px 10px;text-align: center;font-size: 12px;color:#fff;background:#fff;border-top:1px solid #eee;width:100%;'>
+	<block wx:if="{{result.isopened}}">
+		<view wx:if="{{isowner}}" bindtap='btnGoCreate' class='blockbutton red'>发起新抽奖</view>
+		<view wx:else bindtap='btnGoCreate' class='blockbutton red'>我也要发起抽奖</view>
+	</block>
+	<block wx:elif="{{isowner&&result.totalusers<=0}}">
+		<view bindtap='btnShowShareMenu' style="padding:0px;margin-right: 5px;border:none;border-radius:0px;background: #666;flex:1;font-size: 12px;color:#fff;height:40px;line-height:40px;">分享给朋友</view>
+		<view bindtap='btnGoEdit' style="flex:1;margin-left: 5px;color: #666;border: 1px solid #666;background: #fff;height:40px;line-height:40px;">重新编辑</view>
+	</block>
+	<block wx:elif="{{result.opentype==0}}">
+		<view bindtap='btnShowShareMenu' style="padding:0px;margin-right: 5px;border:none;border-radius:0px;background: #666;flex:1;font-size: 12px;color:#fff;height:40px;line-height:40px;">分享给朋友</view>
+		<view bindtap='btnGoCreate' style="flex:1;margin-left: 5px;color: #666;border: 1px solid #666;background: #fff;height:40px;line-height:40px;">我也要发起抽奖</view>
+	</block>
+	<block wx:elif="{{result.opentype==1}}">
+		<view bindtap='btnShowShareMenu' style="padding:0px;border:none;border-radius:0px;background: #666;flex:1;font-size: 12px;color:#fff;height:40px;line-height:40px;">发送抽奖邀请</view>
+	</block>
+	<block wx:elif="{{result.opentype==2}}">
+		<view wx:if="{{isowner}}" bindtap='btnOpenLucky' style="padding:0px;margin-right:5px;border:none;border-radius:0px;background: #666;flex:1;font-size: 12px;color:#fff;height:40px;line-height:40px;">现在开奖</view>
+		<view wx:else bindtap='btnShowShareMenu' style="padding:0px;margin-right:5px;border:none;border-radius:0px;background: #666;flex:1;font-size: 12px;color:#fff;height:40px;line-height:40px;">分享给朋友</view>
+		<view bindtap='btnGoCreate' style="flex:1;margin-left: 5px;padding:10px 0px;color: #666;border: 1px solid #666;background: #fff;">我也要发起抽奖</view>
+	</block>
+</view>
+<view>
+<template is='luckydrawCardWithVideo' data="{{...result}}"/>
+<view wx:if="{{showAdvTips}}" style='padding:10px;position: absolute;width:100%;z-index:3;'>
+	<view style='box-shadow:0px 2px 10px #ccc;background:#ffffcc;font-size:12px;text-align: center;color:#666;padding:10px;'>
+		<text style='font-size:12px;'>高级玩法：</text>
+		<text wx:if="{{result.advpassword!=''}}" style='margin-left:4px;font-size:12px;'>[参与口令]</text>
+		<text wx:if="{{result.advgps!=''}}" style='margin-left:4px;font-size:12px;'>[限定地点]</text>
+		<text wx:if="{{result.advgendertype!=0}}" style='margin-left:4px;font-size:12px;'>{{result.advgendertype==1?'[限男性]':'[限女性]'}}</text>
+		<text wx:if="{{result.advbarcode!=''}}" style='margin-left:4px;font-size:12px;'>[扫描条码]</text>
+		<text wx:if="{{result.advcoinbottom>0}}" style='margin-left:4px;font-size:12px;'>[RP币余额]</text>
+		<text wx:if="{{result.advneedinfokey!=''}}" style='margin-left:4px;font-size:12px;'>[必备资料]</text>
+		<text wx:if="{{result.advshare==1}}" style='margin-left:4px;font-size:12px;'>[可裂变]</text>
+	</view>
+</view>
+<view wx:if="{{result.sponser!=''}}">
+	<template is='divider' />
+	<view bindtap='btnOpenMiniApp' data-xcxid='{{result.sponserxcxid}}' data-xcxpath='{{result.xcxpath}}' data-sponserurl='{{result.sponserurl}}' class='weui-flex cell clickable' style=''>
+		<view class='celllabel'>赞助商</view>
+		<view class='weui-flex__item cellcontent'>{{result.sponser}}</view>
+		<view class='cellsuffix'><text class='iconfont icon-right'></text></view>
+	</view>
+</view>
+<view wx:if="{{result.sponser==''}}">
+	<template is='divider' />
+	<view class='weui-flex cell clickable' style=''>
+		<view class='celllabel'>抽奖发起人</view>
+		<view class='weui-flex__item cellcontent' style='padding-top:5px;'><image src='{{result.ownerInfo.headimg}}' mode='aspectFill' background-size='cover' style='width:20px;height:20px;border-radius:10px;'></image></view>
+		<view class='cellsuffix' style='color:#000;'>{{result.ownerInfo.nickname}}</view>
+	</view>
+</view>
+<view wx:if="{{result.isopened&&isowner}}">
+	<template is='divider' />
+	<view bindtap='btnAwardsAddress' class='weui-flex cell clickable' style=''>
+		<view class='celllabel'>中奖者收货信息 {{result.addressreadynum}}/{{result.totalluckymannum}}</view>
+		<view class='weui-flex__item cellcontent'></view>
+		<view class='cellsuffix'><text class='iconfont icon-right'></text></view>
+	</view>
+</view>
+<view wx:if="{{result.sponserslogan!=''}}" style='padding:10px 0px;'>
+	<view style='padding:15px 10px;background:#fffbe6;font-size:14px;color:#666;'>
+		<text style='font-size:24px;float:left;margin-top:-10px;color:rgba(0,0,0,.3);margin-right:5px;'>“</text>{{result.sponserslogan}}
+	</view>
+</view>
+<view>
+	<view wx:if="{{result.isopened}}" style="padding:10px;background: #fff;margin-top:10px;margin-bottom: 10px;">
+		<view style="width:100%;border: 1px solid #ccc;text-align:center;padding:20px;">
+			<image style='width:60px;height:60px;' src="../../images/{{result.isluckyman?'emoji_win.gif':'emoji_lose.gif'}}"></image>
+			<view wx:if="{{result.isjoined}}" style='color: #666;text-align: center'>
+				<text wx:if='{{result.isluckyman}}' style="color: #ff3366;">恭喜！你中奖啦</text>
+				<text wx:else>很遗憾，你未中奖</text>
+			</view>
+			<view wx:else style='color: #666;text-align: center'>
+				<text>没上车？下次请早哦</text>
+			</view>
+			<view wx:if="{{result.isluckyman}}" style='font-size:12px;color:#999;'>“我的”-“中奖记录”中可<text bindtap='btnGoAwardHistory' style='color:#0099ee;'>填写收货地址</text></view>
+			<view style='text-align:center;padding:10px;'>
+				<text bindtap='btnAllLuckyGuys' style='color:#0099ee;font-size:14px;'>查看中奖名单</text>
+			</view>
+		</view>
+	</view>
+	<view wx:else>
+		<view wx:if="{{userInfo}}" style='padding:30px 0px;'>
+			<view wx:if="{{result.startdate!=0&&!canstart}}" style='text-align: center;padding:10px;'>
+				<text style="font-size:12px;color: #666;">抽奖通道开启时间</text>
+				<view style='font-family:Helvetica;color:#ff5500;font-size:16px;font-weight: bold;height:30px;line-height: 30px;'>{{startformat}}</view>
+			</view>
+			<view wx:elif="{{!result.isopened}}" style='box-sizing:border-box;background-position:center;background-origin: border-box;background-repeat:no-repeat;background-image: url("data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 100 100\'%3E%3C!----%3E %3Cpath d=\'M 50,50 m 0,-47.5 a 47.5,47.5 0 1 1 0,95 a 47.5,47.5 0 1 1 0,-95\' stroke=\'%23cccccc\' stroke-width=\'5\' fill-opacity=\'0\'%3E%3C/path%3E %3Cpath d=\'M 50,50 m 0,-47.5 a 47.5,47.5 0 1 1 0,95 a 47.5,47.5 0 1 1 0,-95\' stroke-linecap=\'round\' stroke=\'%23ff5500\' stroke-width=\'5\' fill-opacity=\'0\' style=\'stroke-dasharray: 300px, 300px; stroke-dashoffset: {{distanceOpen}}px; transition: stroke-dashoffset 0.6s ease 0s, stroke 0.6s ease;\'%3E%3C/path%3E%3C/svg%3E");box-shadow:none;width:150px;height:150px;border-radius:75px;margin:0 auto;text-align:center;background-color:#ffffff;color:#ff5500;'>
+				<view wx:if="{{!result.isjoined}}">
+					<form bindsubmit="btnJoinLuckyDraw" report-submit>
+						<button class='blockbutton red' form-type='submit' plain='true' style="width:150px;height:150px;border-radius:75px;margin:0 auto;line-height:150px;padding:0;border:none;">
+							参与抽奖
+						</button>
+					</form>
+				</view>
+				<view wx:else>
+					<view wx:if="{{result.opentype==2}}" style="line-height:150px;">
+						<view style="font-size: 14px;">已参加，待开奖</view>
+						<view style='color:#0099ee;font-size:12px;'>{{result.joinedtipsbuttontitle}}</view>
+						<view wx:if="{{result.joinedtipsbuttontitle&&result.joinedtipsbuttontitle!=''}}" style='color:#0099ee;font-size:10px;margin-top:15px;' bindtap='showJoinedTips' data-tips='{{result.joinedtips}}'>{{result.joinedtipsbuttontitle}}</view>
+					</view>
+					<view wx:else style="padding-top:55px;">
+						<view style="font-size: 14px;">已参加，待开奖</view>
+						<view style="font-size: 11px;">{{distanceOpenStr}}</view>
+						<view wx:if="{{result.joinedtipsbuttontitle&&result.joinedtipsbuttontitle!=''}}" style='color:#0099ee;font-size:10px;margin-top:15px;' bindtap='showJoinedTips' data-tips='{{result.joinedtips}}'>{{result.joinedtipsbuttontitle}}</view>
+					</view>
+				</view>
+			</view>
+			<!-- <view wx:else style='box-sizing:border-box;background-position:center;background-origin: border-box;background-repeat:no-repeat;box-shadow:none;width:150px;height:150px;border-radius:75px;margin:0 auto;line-height:150px;text-align:center;background-color:rgba(255,85,0,.3);color:#fff;'>已开奖</view> -->
+		</view>
+		<view wx:else style='padding:10px;'>
+			<view style='font-size:12px;text-align:center;padding:20px 10px;background:rgba(0,0,0,.1);margin-bottom:20px;border-radius:5px;'>点击登录参与抽奖</view>
+			<button plain='plain' style='border:none;padding:0;' open-type="getUserInfo" bindgetuserinfo="bindGetUserInfo"><view class='blockbutton yellow'>登录</view></button>
+		</view>
+	</view>
+</view>
+<view style='padding-bottom:20px;' wx:if="{{canstart}}">
+	<view style='width:100%;text-align:center;font-size:12px;color:#999;'><text>{{result.isopened?'感谢':'已有'}}</text> {{result.totalusers}} 人参与，<text bindtap='btnAllJoiner' style='color:#0099ee;'>查看全部<text class='iconfont icon-right' style='margin-left:2px;font-size:12px;'></text></text></view>
+	<view wx:if="{{!result.isopened}}" style="display: flex;justify-content: center;margin-top:5px;">
+		<block wx:for="{{result.recentjoins}}">
+			<image style='width:20px;height:20px;margin-right: 4px;' mode='aspectFill' background-size='cover' src='{{item.headimg}}'></image>
+		</block>
+	</view>
+</view>
+<view wx:if="{{result.isjoined}}" style='padding:10px;background:#fff;'>
+		<view style='padding:0px 40px;margin-bottom:10px'>
+				<template is='title1' data="{{title:'众奖秘籍'}}"/>
+			</view>
+		<view style="font-size: 12px;color: #666;padding:5px;border:1px solid #ccc;margin-bottom: 5px;">
+			<view style="font-weight: bold;color:#FF5500;">如何保证公平公正？</view>
+			<view>按参与的先后顺序排列，从参与名单内随机抽取获奖者。任何人都可以随时查看抽奖名单。</view>
+		</view>
+		<view wx:if="{{result.advshare==1}}" style="font-size: 12px;color: #666;padding:5px;border:1px solid #ccc;margin-bottom: 5px;">
+			<view style="font-weight: bold;color:#FF5500;">如何提高中奖几率？</view>
+			<view>每邀请一个好友成功参加，分享者在抽奖名单中都会再出现一次，邀请越多中奖率越高。</view>
+		</view>
+</view>
+<view wx:if="{{result.awardpics.length>0}}" style='padding:10px;background:#fff;'>
+	<view style='padding:0px 40px;margin-bottom:10px'>
+		<template is='title1' data="{{title:'了解更多'}}"/>
+	</view>
+	<block wx:for="{{result.awardpics}}">
+		<image src='{{item}}' style='width:100%;' mode='widthFix'></image>
+	</block>
+</view>
+</view>
+</view>

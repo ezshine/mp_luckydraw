@@ -1,0 +1,22 @@
+<!--pages/my/mypost.wxml-->
+<import src="../../styles/templates.wxml"/>
+<view style='z-index:2;position:fixed;margin:0 auto;bottom:0px;width:100%;text-align:center;padding:10px;box-sizing:border-box;'>
+	<view bindtap='goCreate' class='blockbutton blue' style='box-shadow:none;'>发起新抽奖</view>
+</view>
+<view style='padding-bottom:60px;'>
+<view class='tabmenu' style='padding:10px;'>
+	<view bindtap='btnChangeTab' data-type='0' class="tab left {{orderType==0?'active':''}}">{{orderTypeStr[0]}}</view>
+	<view bindtap='btnChangeTab' data-type='1' class="tab right {{orderType==1?'active':''}}">{{orderTypeStr[1]}}</view>
+</view>
+<view>
+	<block wx:for="{{list}}">
+		<navigator url='/pages/luckydraw/detail?id={{item.id}}' style='margin-bottom:10px;'>
+			<template is='luckydrawCardSmall' data='{{...item}}'/>
+		</navigator>
+		<template is='divider'/>
+	</block>
+	<view bindtap="btnLoadMore" wx:if="{{canloadmore}}" style="width:100%;font-size:16px;color:#999;text-align:center;padding:10px;">
+		点击加载更多
+	</view>
+</view>
+</view>

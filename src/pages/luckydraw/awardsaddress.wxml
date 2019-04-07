@@ -1,0 +1,53 @@
+<!--pages/luckydraw/alljoiner.wxml-->
+<import src="../../styles/templates.wxml"/>
+<view wx:if="{{showDetail}}" style='width:100%;height:100%;position:fixed;z-index:9;background:#f2f2f2;overflow:hidden;'>
+	<view style='padding:10px;background:#fff;'>
+		<view style='font-size:12px;color:#333;'>
+			<view wx:if="{{list[detailIndex].luckydrawInfo.advneedinfokey!=''}}" bindtap="btnCopyOption" style="padding:10px;background:#ffffcc;margin-bottom:10px;">
+				<view><text style="font-weight: bold;">{{list[detailIndex].luckydrawInfo.advneedinfokey}}：</text>{{list[detailIndex].userInfo.optiondetail[list[detailIndex].luckydrawInfo.advneedinfokey]}}</view>
+			</view>
+			<view bindtap="btnCopyAddress" style="padding:10px;background:#ffffcc;">
+				<view><text style="font-weight: bold;">收货地址：</text>{{list[detailIndex].expressaddress.provinceName}}{{list[detailIndex].expressaddress.cityName}}{{list[detailIndex].expressaddress.countyName}}{{list[detailIndex].expressaddress.detailInfo}}</view>
+				<view><text style="font-weight: bold;">收货人：</text>{{list[detailIndex].expressaddress.userName}}({{list[detailIndex].expressaddress.telNumber}})</view>
+				<view style="text-align: center;columns: #0099ee;margin-top:10px;">点击复制到剪贴板</view>
+			</view>
+		</view>
+		<view style='font-size: 12px;padding:5px 0px;'>快递单号：</view>
+		<input type='number' maxlength='16' value="{{list[detailIndex].expressno}}" bindinput='inputExpressNo' style='box-sizing:border-box;width:100%;background:#fff;height:40px;line-height:40px;font-size:14px;padding:0px 10px;border:1px solid #ccc;' placeholder='快递单号'></input>
+		<view style='font-size: 12px;padding:5px 0px;'>备注：</view>
+		<textarea fixed="true" maxlength="50" value="{{list[detailIndex].expressremark}}" bindinput='inputExpressRemark' style='height:60px;width:100%;box-sizing:border-box;font-size: 14px;padding:10px;border: 1px solid #ccc;' placeholder="备注信息"></textarea>
+	</view>
+	<view style='padding:20px 10px;display:flex;'>
+		<view class='blockbutton gray' bindtap='btnBack' style='margin-right:10px;'>返回</view>
+    <view class='blockbutton yellow' bindtap='btnSaveExpressInfo'>保存</view>
+  </view>
+</view>
+<view class="weui-search-bar" style="background:#fff;border:none;width:100%;">
+  <view class="weui-search-bar__form">
+    <view class="weui-search-bar__box">
+      <icon class="weui-icon-search_in-box" type="search" size="14"></icon>
+      <input type="text" class="weui-search-bar__input" placeholder="用户昵称关键字" value="{{inputVal}}" focus="{{inputShowed}}" bindinput="inputTyping" />
+      <view class="weui-icon-clear" wx:if="{{inputVal.length > 0}}" bindtap="clearInput">
+        <icon type="clear" size="14"></icon>
+      </view>
+    </view>
+    <label class="weui-search-bar__label" hidden="{{inputShowed}}" bindtap="showInput">
+				<icon class="weui-icon-search" type="search" size="14"></icon>
+				<view class="weui-search-bar__text">输入昵称查询</view>
+		</label>
+  </view>
+  <view class="weui-search-bar__cancel-btn" hidden="{{!inputShowed}}" bindtap="hideInput">取消</view>
+</view>
+<view style=''>
+	<block wx:for="{{list}}">
+		<view bindtap='btnShowAddress' data-index="{{index}}" class='weui-flex cell clickable'>
+			<view class='celllabel'><image src='{{item.userInfo.headimg}}' mode='aspectFill' style='width:28px;height:28px;border-radius:14px;float:left;margin-right:5px;margin-top:5px;' background-size='cover'></image> {{item.userInfo.nickname}}</view>
+			<view class='weui-flex__item cellcontent' style='color:#999;'>{{item.expressaddress?(item.expressno!=''?'已发货':'已填写'):'未填写'}}</view>
+			<view class='cellsuffix'><text class='iconfont icon-right'></text></view>
+		</view>
+		<template is='divider' />
+	</block>
+	<view bindtap="btnLoadMore" wx:if="{{canloadmore}}" style="width:100%;font-size:16px;color:#999;text-align:center;padding:10px;">
+		点击加载更多
+	</view>
+</view>

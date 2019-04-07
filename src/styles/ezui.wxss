@@ -1,0 +1,49 @@
+
+.blockbutton
+{
+  border-radius:22px;
+  width:100%;
+  height:44px;
+  line-height:44px;
+  font-size:16px;
+  text-align:center;
+  background:#ccc;
+  color:#fff;
+  border-top:none;
+  border-left:none;
+  border-right:none;
+	border-bottom:rgba(0,0,0,.1) 2px solid;
+}
+.blockbutton:active{
+  opacity: .8;
+}
+.blockbutton.gray
+{
+  background:#ccc;
+  color:#fff;
+  box-shadow:0px 10px 50px rgba(204,204,204,.5);
+}
+.blockbutton.red
+{
+  background:#FF5500;
+  color:#fff;
+  box-shadow:0px 10px 50px rgba(255,85,0,.5);
+}
+.blockbutton.blue
+{
+	background:#0099ee;
+	color:#fff;
+	box-shadow:0px 10px 50px rgba(0,153,238,.5);
+}
+.blockbutton.yellow
+{
+  background:#FFcc55;
+  color:#fff;
+  box-shadow:0px 10px 50px rgba(255,204,85,.5);
+}
+.blockbutton.black
+{
+  background:#333333;
+  color:#fff;
+  box-shadow:0px 10px 50px rgba(51,51,51,.5);
+}

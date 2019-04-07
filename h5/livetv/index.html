@@ -1,0 +1,138 @@
+﻿<html>
+<head>
+	<title>苹果2018WWDC直播</title>
+	<meta name="viewport" content="width=device-width,initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no" />
+	<meta name="apple-mobile-web-app-capable" content="yes" />
+	<style>
+		html,body{width:100%;height:100%;margin:0;padding:0;font-family: Verdana;box-sizing: border-box;background:#f2f2f2;}
+		div{box-sizing: border-box;}
+	</style>
+	<link href="css/weui.min.css" rel="stylesheet" type="text/css" />
+	<link href="css/iconfont.css" rel="stylesheet" type="text/css" />
+
+	<script type="text/javascript" src='js/zepto.min.js'></script>
+	<script type="text/javascript" src='js/vue.min.js'></script>
+	<script type="text/javascript" src="js/utils.js"></script>
+	<script type="text/javascript" src="js/weui.min.js"></script>
+	<script type="text/javascript">
+	var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "//hm.baidu.com/hm.js?9e1a077ce4134c787bb4d3269e39ae53";
+            var s = document.getElementsByTagName("script")[0];
+            s.parentNode.insertBefore(hm, s);
+		})();
+		
+		var myVue;
+		Zepto(function($){
+		  init();
+		});
+		function init(){
+			myVue = new Vue({
+                el: '#myVue',
+                data: {
+					page:0,
+					canloadmore:false,
+					list:[],
+					content:"",
+                    streamsrc:"https://p-events-delivery.akamaized.net/18oijbasfvuhbfsdvoijhbsdfvljkb6/m3u8/hls_mvp.m3u8"
+                },
+				methods:{
+					datedis:function(timestr){
+						return Utils.getTimeDistance(timestr);
+					},
+					updateList:function(){
+						var loading=weui.loading("请求中");
+						var that=this;
+						$.ajax({
+							url:"https://jnsii.com/zj/api/listcomment.php",
+							type:"GET",
+							dataType:"json",
+							data:{
+								page:this.page,
+								luckydrawid:Utils.getURLParams("luckydrawid")
+							},
+							complete:function(){
+								loading.hide();
+							},
+							success:function(obj){
+								if(obj.err==0){
+									if(that.page==0)that.list=[];
+									if(obj.result.length>=10)that.canloadmore=true;
+									else that.canloadmore=false;
+									that.list=that.list.concat(obj.result);
+								}
+							}
+						});
+					},
+					send:function(){
+						var that=this;
+						if($.trim(this.content)=="")return;
+						if(!Utils.getURLParams("luckydrawid")||!Utils.getURLParams("uid")){
+							return weui.alert("请先登录");
+						}
+						$.ajax({
+							url:"https://jnsii.com/zj/api/postcomment.php",
+							type:"POST",
+							contentType : "application/json; charset=utf-8",
+							dataType:"json",
+							data:JSON.stringify({
+								content:this.content,
+								luckydrawid:Utils.getURLParams("luckydrawid"),
+								uid:Utils.getURLParams("uid")
+							}),
+							success:function(obj){
+								if(obj.err==0){
+									that.page=0;
+									that.updateList();
+								}
+							}
+						});
+						this.content="";
+					},
+					refresh:function(){
+						this.page=0;
+						this.updateList();
+					},
+					loadmore:function(){
+						if(!this.canloadmore)return;
+						this.page=this.page+1;
+						this.updateList();
+					}
+				},
+				mounted(){
+					this.updateList();
+				}
+            });
+		}
+	</script>
+</head>
+<body>
+	<div id='myVue'>
+		<video id='videoPlayer' controls="controls" webkit-playsinline playsinline autoplay="autoplay" style="width:100%;margin-bottom: 10px;" :src='streamsrc'>
+		</video>
+		<div style="width:100%;padding:10px;background: #ffee66;text-align: center;font-size: 14px;color:#000;">参与口令：乔布斯生日 19550224<div style="font-size: 12px;">请留言参与讨论，没留言的话可能会失去抽奖资格</div></div>
+		<div style="width:100%;font-size:14px;padding:5px;background: #fff;"><span style="color:#000;font-weight: bold;">最新评论</span><span @click='refresh' style='float:right;color:#0099ee;'>刷新</span></div>
+		<div style="width:100%;padding:10px 5px;background:#fff;padding-bottom:80px;">
+			<div v-for="(item,index) in list"  style="display:flex;width:100%;">
+				<div style="width:40px;height:40px;border-radius: 20px;background-position: center;background-size: cover;border: 1px solid #eee;" :style="{'backgroundImage':'url('+item.ownerheadimg+')'}">
+					
+				</div>
+				<div style="flex:1;margin-left: 5px;">
+					<div style="font-size:14px;color:#000;">{{item.ownernickname}}</div>
+					<div style="font-size: 12px;color:#999;">{{datedis(item.createdate)}}发布</div>
+					<div style="font-size: 14px;color:#000;">{{item.content}}</div>
+					<div style="padding:10px 0px;width:100%;"><div style="height:1px;background: #eee;width:100%;"></div></div>
+				</div>
+			</div>
+			<div v-if="canloadmore" @click='loadmore' style='width:100%;padding:10px;color:#999;text-align: center;font-size: 14px;'>加载更多</div>
+		</div>
+		<div style="width:100%;position: fixed;height:60px;padding:5px;background:#ffffff;border-top: 1px solid #ccc;bottom: 0px;">
+			<div style="width:100%;height: 100%;display:flex;">
+				<textarea maxlength="500" style="flex:1;width:100%;height:100%;padding:5px;box-sizing: border-box;border-radius:5px;border: 1px solid #ccc;outline: none;resize:none;" v-model='content' placeholder="说点儿什么吧~"></textarea>
+				<div @click='send' style="width:80px;height:100%;line-height: 50px;background: #66ee66;color:#fff;text-align: center;border-radius: 5px;margin-left: 5px;">发送</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

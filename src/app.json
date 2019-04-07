@@ -1,0 +1,26 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/my/index",
+    "pages/my/userotherinfo",
+    "pages/create/create",
+    "pages/luckydraw/detail",
+    "pages/my/mypost",
+    "pages/my/myjoin",
+    "pages/my/myaward",
+    "pages/my/wallet",
+    "pages/luckydraw/map",
+    "pages/webview/index",
+    "pages/luckydraw/list",
+    "pages/luckydraw/alljoiner",
+    "pages/luckydraw/shareimage",
+    "pages/luckydraw/awardsaddress",
+    "pages/my/donate"
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#fff",
+    "navigationBarTitleText": "众奖",
+    "navigationBarTextStyle": "black"
+  }
+}

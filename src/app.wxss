@@ -1,0 +1,66 @@
+/**app.wxss**/
+@import "styles/weui.wxss";
+@import "styles/iconfont.wxss";
+@import "styles/ezui.wxss";
+
+.container {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: 200rpx 0;
+  box-sizing: border-box;
+} 
+view{box-sizing: border-box;}
+
+.cell{
+	padding:5px 10px;
+	background:#fff;
+	line-height:40px;
+}
+.cell.clickable:active{
+	background:#eee;
+}
+.cell>.celllabel
+{
+	font-size:14px;
+	height:40px;
+}
+.cell>.celllabel>input
+{
+	height:40px;
+	line-height:40px;
+	box-sizing: border-box;
+}
+.cell>.cellcontent
+{
+	font-size:14px;
+	height:40px;
+	margin-left:10px;
+	text-align:right;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	overflow: hidden;
+}
+.cell>.cellcontent>input
+{
+	height:40px;
+	line-height:40px;
+	box-sizing: border-box;
+}
+.celllabel>.iconfont
+{
+	margin-right:5px;
+}
+.cell>.cellsuffix
+{
+	font-size:14px;
+	height:40px;
+	margin-left:5px;
+	text-align:right;
+}
+.cellsuffix>.iconfont
+{
+	color:#ccc;
+}

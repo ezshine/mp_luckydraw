@@ -1,0 +1,5 @@
+<!--pages/book/shelfimage.wxml-->
+<canvas style="width: 100%; height: {{imgHeight}}px;" canvas-id="mycanvas"></canvas>
+<view style="width:100%;background:#fff;padding:20px 10px 40px 10px;">
+  <view bindtap="btnSaveImage" class='blockbutton red'>保存到相册</view>
+</view>

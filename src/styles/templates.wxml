@@ -1,0 +1,104 @@
+<template name='tabbar'>
+  <view class="weui-flex" style='position:fixed;z-index:99;bottom:0;width:100%;border-top:1px solid #eee;background:#fff;'>
+    <view data-index='0' bindtap='changeTabIndex' class="weui-flex__item" style="text-align:center;font-size:14px;color:{{activeIndex==0?'#FF5500':'#999'}}">
+      <view class="iconfont icon-discover{{activeIndex==0?'fill':''}}"></view>
+      <view style='font-size:12px;'>发现</view>
+    </view>
+    <view bindtap='goCreate' style='font-size:20px;margin-top:-25px;'>
+      <text class='iconfont icon-roundaddfill' style='font-size:44px;text-shadow:0px 2px 5px #ccc;color:#333;'></text>
+    </view>
+    <view data-index='1' bindtap='changeTabIndex' class="weui-flex__item" style="text-align:center;font-size:12px;color:{{activeIndex==1?'#FF5500':'#999'}}">
+      <view class="iconfont icon-people{{activeIndex==1?'fill':''}}"></view>
+      <view style='font-size:12px;'>我的</view>
+    </view>
+  </view>
+</template>
+
+
+<template name='divider'>
+  <view style='padding:0px 10px;background:#fff;'><view style='height:1px;background:#eee;width:100%;'></view></view>
+</template>
+
+<template name='title1'>
+	<view style='display:flex;justify-content: space-between;width:100%;font-size:14px;color:#999;'>
+		<view style='width:100px;background:#ccc;height:1px;flex:1;margin-top:10px;'></view>
+		<view style='padding:0px 20px;'>{{title}}</view>
+		<view style='width:100px;background:#ccc;height:1px;flex:1;margin-top:10px;'></view>
+	</view>
+</template>
+
+<template name='luckydrawCard'>
+	<view style='width:100%;background:#fff;position:relative;'>
+		<text wx:if="{{sponser!=''}}" style='padding:5px 10px;background:rgba(0,0,0,.5);position:absolute;right:0px;top:10px;font-size:12px;color:#fff;'>由 {{sponser}} 提供</text>
+		<image src="{{awardimage}}" mode='aspectFill' style='width:100%;height:270px;' background-size="cover"></image>
+		<view style='padding:0px 10px 10px 10px;'>
+				<view style='height:30px;line-height:30px;font-size:14px;text-overflow: ellipsis;white-space: nowrap;overflow: hidden;'>奖品：{{awardname}} x{{awardnum}}</view>
+				<view style='display:flex;justify-content: space-between;height:14px;line-height:14px;'>
+					<view wx:if="{{!isopened}}">
+						<view wx:if="{{opentype==0}}" style='height:14px;line-height:14px;font-size:12px;color:#999;text-overflow: ellipsis;white-space: nowrap;overflow: hidden;'>{{opendatestr}} {{opentypestr}}</view>
+						<view wx:if="{{opentype==1}}" style='height:14px;line-height:14px;font-size:12px;color:#999;text-overflow: ellipsis;white-space: nowrap;overflow: hidden;'>{{opentypestr}}</view>
+						<view wx:if="{{opentype==2}}" style='height:14px;line-height:14px;font-size:12px;color:#999;text-overflow: ellipsis;white-space: nowrap;overflow: hidden;'>本抽奖由发起人手动开奖</view>
+					</view>
+					<view wx:else style="height:14px;line-height:14px;font-size:12px;">
+						<view style="color: #ff3366;">已开奖</view>
+					</view>
+					<view bindtap='showAdvTips' style="text-align: right;height:14px;line-height:14px;color:#999;font-size: 12px;">
+						<text wx:if="{{advpassword!=''}}" class='iconfont icon-lock' style='margin-left:4px;font-size:12px;'></text>
+						<text wx:if="{{advgps!=''}}" class='iconfont icon-location' style='margin-left:4px;font-size:12px;'></text>
+						<text wx:if="{{advgendertype!=0}}" class="iconfont icon-{{advgendertype==1?'male':'female'}}" style='margin-left:4px;font-size:12px;'></text>
+						<text wx:if="{{advbarcode!=''}}" class='iconfont icon-scan' style='margin-left:4px;font-size:12px;'></text>
+						<text wx:if="{{advcoinbottom>0}}" class='iconfont icon-pay' style='margin-left:4px;font-size:12px;'></text>
+						<text wx:if="{{advneedinfokey!=''}}" class='iconfont icon-news' style='margin-left:4px;font-size:12px;'></text>
+						<text wx:if="{{advshare==1}}" class='iconfont icon-share' style='margin-left:4px;font-size:12px;'></text>
+					</view>
+				</view>
+			</view>
+	</view>
+</template>
+
+<template name='luckydrawCardSmall'>
+	<view style='width:100%;background:#fff;position:relative;'>
+		<image src="{{awardimage}}" mode='aspectFill' style='width:80px;height:80px;float:left;' background-size="cover"></image>
+		<view style='padding:0px 10px 5px 0px;margin-left: 85px;height:80px;'>
+			<view style='height:30px;line-height:30px;font-size:14px;text-overflow: ellipsis;white-space: nowrap;overflow: hidden;'>奖品：{{awardname}} x{{awardnum}}</view>
+			<view wx:if="{{!isopened}}">
+					<view wx:if="{{opentype==0}}" style='height:14px;line-height:14px;font-size:12px;color:#999;text-overflow: ellipsis;white-space: nowrap;overflow: hidden;'>{{opendatestr}} {{opentypestr}}</view>
+					<view wx:if="{{opentype==1}}" style='height:14px;line-height:14px;font-size:12px;color:#999;text-overflow: ellipsis;white-space: nowrap;overflow: hidden;'>{{opentypestr}}</view>
+					<view wx:if="{{opentype==2}}" style='height:14px;line-height:14px;font-size:12px;color:#999;text-overflow: ellipsis;white-space: nowrap;overflow: hidden;'>本抽奖由发起人手动开奖</view>
+				</view>
+				<view wx:else style="height:14px;line-height:14px;font-size:12px;">
+					<view style="color: #ff3366;">已开奖</view>
+				</view>
+			<view wx:if="{{sponser!=''}}" ><text style="padding:4px 6px;background:rgba(0,153,238,.5);font-size:12px;color:#fff;text-overflow: ellipsis;white-space: nowrap;overflow: hidden;">由 {{sponser}} 提供</text></view>
+			<view wx:else ><text style="padding:4px 6px;background:rgba(255,51,102,.5);font-size:12px;color:#fff;text-overflow: ellipsis;white-space: nowrap;overflow: hidden;">由 {{ownerInfo.nickname}} 发起</text></view>
+    </view>
+	</view>
+</template>
+
+<template name='luckydrawCardWithVideo'>
+	<view style='width:100%;background:#fff;position:relative;'>
+		<view wx:if="{{awardvideo==''}}">
+			<image src="{{awardimage}}" mode='aspectFill' style='width:100%;height:270px;' background-size="cover"></image>
+		</view>
+		<view wx:else>
+			<video src="{{awardvideo}}" objectFit='cover' poster='{{awardimage}}' style='width:100%;height:270px;'></video>
+		</view>
+		<view style='padding:0px 10px 10px 10px;'>
+			<view style='height:30px;line-height:30px;font-size:14px;text-overflow: ellipsis;white-space: nowrap;overflow: hidden;'>奖品：{{awardname}} x{{awardnum}}</view>
+			<view style='display:flex;justify-content: space-between;height:14px;line-height:14px;'>
+				<view wx:if="{{opentype==0}}" style='height:14px;line-height:14px;font-size:12px;color:#999;text-overflow: ellipsis;white-space: nowrap;overflow: hidden;'>{{opendatestr}} {{opentypestr}}</view>
+				<view wx:if="{{opentype==1}}" style='height:14px;line-height:14px;font-size:12px;color:#999;text-overflow: ellipsis;white-space: nowrap;overflow: hidden;'>{{opentypestr}}</view>
+				<view wx:if="{{opentype==2}}" style='height:14px;line-height:14px;font-size:12px;color:#999;text-overflow: ellipsis;white-space: nowrap;overflow: hidden;'>本抽奖由发起人手动开奖</view>
+				<view bindtap='showAdvTips' style="text-align: right;height:14px;line-height:14px;color:#999;font-size: 12px;">
+					<text wx:if="{{advpassword!=''}}" class='iconfont icon-lock' style='margin-left:4px;font-size:12px;'></text>
+					<text wx:if="{{advgps!=''}}" class='iconfont icon-location' style='margin-left:4px;font-size:12px;'></text>
+					<text wx:if="{{advgendertype!=0}}" class="iconfont icon-{{advgendertype==1?'male':'female'}}" style='margin-left:4px;font-size:12px;'></text>
+					<text wx:if="{{advbarcode!=''}}" class='iconfont icon-scan' style='margin-left:4px;font-size:12px;'></text>
+					<text wx:if="{{advcoinbottom>0}}" class='iconfont icon-pay' style='margin-left:4px;font-size:12px;'></text>
+					<text wx:if="{{advneedinfokey!=''}}" class='iconfont icon-news' style='margin-left:4px;font-size:12px;'></text>
+					<text wx:if="{{advshare==1}}" class='iconfont icon-share' style='margin-left:4px;font-size:12px;'></text>
+				</view>
+			</view>
+		</view>
+	</view>
+</template>

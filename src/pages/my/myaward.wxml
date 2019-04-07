@@ -1,0 +1,33 @@
+<!--pages/my/mypost.wxml-->
+<import src="../../styles/templates.wxml"/>
+<view wx:if="{{list.length>0}}">
+	<block wx:for="{{list}}">
+		<view style="padding:10px;margin-bottom:10px;">
+			<view style='background:#fff;border-top-left-radius: 8px;border-top-right-radius: 8px;overflow: hidden;'>
+				<navigator url='/pages/luckydraw/detail?id={{item.luckydrawid}}' style='padding:10px;'>
+					<template is='luckydrawCardSmall' data='{{...item.luckydrawInfo}}'/>
+				</navigator>
+				<template is='divider'/>
+				<view wx:if="{{item.expressaddress}}" style="padding:10px;font-size:12px;color:#666;">
+					<view><text style="font-weight: bold;">收货地址：</text>{{item.expressaddress.provinceName}}{{item.expressaddress.cityName}}{{item.expressaddress.countyName}}{{item.expressaddress.detailInfo}}</view>
+					<view><text style="font-weight: bold;">收货人：</text>{{item.expressaddress.userName}}({{item.expressaddress.telNumber}})</view>
+					<view><text style="font-weight: bold;">备注：</text>{{item.expressremark}}</view>
+					<view><text style="font-weight: bold;">状态：</text><text wx:if="{{item.expressno!=''}}" bindtap='btnCheckExpress' data-expressno='{{item.expressno}}'>已发货 <text style='color:#0099ee;'>跟踪物流信息</text></text><text wx:else data-id='{{item.luckydrawid}}' bindtap="btnSubmitExpressAddress">待发货 <text style="font-weight: bold;margin-left:10px;color:#0099ee;">更改收货地址</text></text></view>
+				</view>
+				<view wx:else style="padding:10px;text-align: center;font-size: 14px;">
+					<form data-id='{{item.luckydrawid}}' bindsubmit="btnSubmitExpressAddress" report-submit>
+						<button class='blockbutton blue' form-type='submit' plain='true' style="width:100%;margin:0 auto;border:none;padding:0;">
+							填写收货地址
+						</button>
+					</form>
+				</view>
+			</view>
+		</view>
+	</block>
+</view>
+<view wx:else style='padding:10px;'>
+	<view style='width:100%;padding:10px;background:rgba(255,255,255,.6);font-size:14px;text-align:center;color:#ff3366;'>
+			还没有众奖记录
+			<view style='font-size:12px;color:#666;margin-top:10px;'>积极参加抽奖，下一次一定RP爆发</view>
+	</view>
+</view>

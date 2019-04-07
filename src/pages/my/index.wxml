@@ -1,0 +1,62 @@
+<!--pages/my/index.wxml-->
+<import src="../../styles/templates.wxml"/>
+<template is="tabbar" data="{{activeIndex: 1}}"/>
+<view wx:if="{{userInfo}}">
+  <view bindtap='btnOtherInfo' class='' style='padding:20px 10px;background:#fff;margin-bottom:10px;text-align:center;'>
+    <image src='{{userInfo.headimg}}' background-size="cover" style='width:60px;height:60px;border-radius:30px;'></image>
+    <view class='' style='font-size:14px;'>{{userInfo.nickname}}</view>
+    <view><text style='padding:2px 5px;background:#00cc66;font-size:12px;color:#fff;border-radius:3px;'>编辑资料</text></view>
+  </view>
+  <view bindtap='btnMyWallet' class='weui-flex cell clickable' style='margin-bottom:10px;'>
+    <view class='celllabel'><text class='iconfont icon-pay'></text>RP币</view>
+    <view class='weui-flex__item cellcontent'>{{userInfo.coin}}</view>
+    <view class='cellsuffix'><text class='iconfont icon-right'></text></view>
+  </view>
+  <view bindtap='btnMyAward' class='weui-flex cell clickable'>
+    <view class='celllabel'><text class='iconfont icon-present'></text>众奖记录</view>
+    <view class='weui-flex__item cellcontent'>{{userInfo.totallucky>0?userInfo.totallucky:''}}</view>
+    <view class='cellsuffix'><text class='iconfont icon-right'></text></view>
+  </view>
+  <template is='divider'/>
+  <view bindtap='btnMyJoin' class='weui-flex cell clickable'>
+    <view class='celllabel'><text class='iconfont icon-notice'></text>我参与的</view>
+    <view class='weui-flex__item cellcontent'>{{userInfo.totaljoin>0?userInfo.totaljoin:''}}</view>
+    <view class='cellsuffix'><text class='iconfont icon-right'></text></view>
+  </view>
+  <template is='divider'/>
+  <view bindtap='btnMyPost' class='weui-flex cell clickable' style='margin-bottom:10px;'>
+    <view class='celllabel'><text class='iconfont icon-edit_light'></text>我发起的</view>
+    <view class='weui-flex__item cellcontent'>{{userInfo.totalsend>0?userInfo.totalsend:''}}</view>
+    <view class='cellsuffix'><text class='iconfont icon-right'></text></view>
+  </view>
+  <!-- <view bindtap='btnDonate' class='weui-flex cell clickable' style='margin-bottom:10px;'>
+    <view class='celllabel'><text class='iconfont icon-selection'></text>捐赠</view>
+    <view class='weui-flex__item cellcontent'></view>
+    <view class='cellsuffix'><text class='iconfont icon-right'></text></view>
+  </view> -->
+  <view bindtap='btnQNA' class='weui-flex cell clickable'>
+    <view class='celllabel'><text class='iconfont icon-question'></text>常见问题</view>
+    <view class='weui-flex__item cellcontent'></view>
+    <view class='cellsuffix'><text class='iconfont icon-right'></text></view>
+  </view>
+  <template is='divider'/>
+  <button open-type='contact' plain="plain" style='border:none;padding:0;'>
+    <view class='weui-flex cell clickable'>
+			<view class='celllabel'><text class='iconfont icon-service'></text>联系客服</view>
+			<view class='weui-flex__item cellcontent'></view>
+			<view class='cellsuffix'><text class='iconfont icon-right'></text></view>
+		</view>
+	</button>
+	<view bindtap='btnSettings' class='weui-flex cell clickable' style='margin-top:10px;'>
+    <view class='celllabel'><text class='iconfont icon-settings'></text>设置</view>
+    <view class='weui-flex__item cellcontent'></view>
+    <view class='cellsuffix'><text class='iconfont icon-right'></text></view>
+  </view>
+	<view style='padding:10px;text-align:center;font-size:14px;'>
+		<text style='text-shadow:0px 1px 1px #fff;color:#ddd;'>{{shortVersion}}</text>
+	</view>
+</view>
+<view wx:else style='padding:10px;'>
+  <view style='font-size:12px;text-align:center;padding:20px 10px;background:rgba(0,0,0,.1);margin-bottom:20px;border-radius:5px;'>点击登录参与抽奖</view>
+  <button plain='plain' style='border:none;padding:0;' open-type="getUserInfo" bindgetuserinfo="bindGetUserInfo"><view class='blockbutton yellow'>登录</view></button>
+</view>

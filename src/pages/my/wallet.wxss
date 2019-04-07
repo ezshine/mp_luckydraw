@@ -1,0 +1,5 @@
+/* pages/my/wallet.wxss */
+page
+{
+	background: #76b6e3;
+}

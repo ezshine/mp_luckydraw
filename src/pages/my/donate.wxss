@@ -1,0 +1,5 @@
+/* pages/my/donate.wxss */
+page
+{
+    background-color: #f2f2f2;
+}

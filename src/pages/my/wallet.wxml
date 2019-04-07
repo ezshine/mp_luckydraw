@@ -1,0 +1,59 @@
+<!--pages/my/wallet.wxml-->
+<import src="../../styles/templates.wxml" />
+<view wx:if="{{userInfo}}">
+  <view style='padding:10px;font-size:14px;color:#fff;'>
+    <text style='font-size:12px;'>RP币余额：</text>{{result.totalcoin}}</view>
+  <view style='text-align:center;padding:40px 0px;'>
+    <form bindsubmit="btnEarnCoin" report-submit>
+      <button form-type='submit' plain='true' style="width:100px;margin:0 auto;border:none;padding:0;">
+				<image src="{{result.canearncoin?'../../images/coin.png':'../../images/digger.gif'}}" mode='widthFix' style='width:100px;margin:0 auto;border-radius:50px;'></image>
+        <!-- <image src='../../images/coin.png' mode='widthFix' style='width:100px;margin:0 auto;opacity:{{result.canearncoin?1:.6}}'></image> -->
+      </button>
+    </form>
+    <view wx:if="{{result.canearncoin}}" style='padding:10px;font-size:14px;color:#fff;'>点击即可领取</view>
+    <view wx:else style='margin-top:20px;font-size:12px;color:#fff;'>
+      <view style='opacity:.6;'>下次领取还需等待</view>
+      <view style='font-size:16px;'>{{distancetimestr}}</view>
+    </view>
+  </view>
+  <view style='padding:10px;'>
+    <view style='background:#fff;padding:20px;'>
+      <template is='title1' data="{{title:'RP币说明'}}" />
+      <view style='font-size:12px;color:#666;margin-top:10px;'>
+        <view style='padding:5px 0px;'>RP币主要用于检验用户活跃，拒绝羊毛党，保证抽奖的公平公正。</view>
+
+        <view style='padding:5px 0px;'>
+          <text style='font-weight:bold;'>生产机制：</text> 每个用户的RP币钱包每1小时会产生1枚RP币，如不领取，也不会累积。
+        </view>
+
+        <view style='padding:5px 0px;'>
+          <text style='font-weight:bold;'>消耗机制：</text> 用户在参与抽奖时将消耗1枚RP币，RP币为0时无法参与抽奖。
+        </view>
+      </view>
+    </view>
+  </view>
+  <view style='padding:10px;'>
+    <view style='background:#fff;padding:20px;'>
+      <template is='title1' data="{{title:'余额变更记录'}}" />
+      <block wx:for="{{list}}">
+        <view style='padding:10px 0px;border-radius:6px;display:flex;background:#fff;margin-bottom:5px;'>
+          <view style='flex:1;font-size:14px;height:40px;'>
+            <view>{{item.msg}}</view>
+            <view style='font-size:12px;color:#999;'>{{item.createdate}}</view>
+          </view>
+          <view style='font-size:18px;height:40px;line-height:40px;'>
+            <text style='font-size:12px;'>{{item.value>0?"+":""}}</text>{{item.value}}
+          </view>
+        </view>
+        <template is='divider' />
+      </block>
+      <view bindtap="btnLoadMore" wx:if="{{canloadmore}}" style="width:100%;font-size:16px;color:#999;text-align:center;padding:10px;">
+        点击加载更多
+      </view>
+    </view>
+  </view>
+</view>
+<view wx:else style='padding:10px;'>
+  <view style='font-size:12px;text-align:center;padding:20px 10px;background:rgba(0,0,0,.1);margin-bottom:20px;border-radius:5px;'>点击登录领取RP币</view>
+  <button plain='plain' style='border:none;padding:0;' open-type="getUserInfo" bindgetuserinfo="bindGetUserInfo"><view class='blockbutton yellow'>登录</view></button>
+</view>

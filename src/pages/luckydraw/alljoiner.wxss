@@ -1,0 +1,42 @@
+/* pages/luckydraw/alljoiner.wxss */
+page
+{
+	background: #f2f2f2;
+}
+.tab{
+	font-size:12px;
+	text-align: center;
+	color:#0099ee;
+	border: 1px solid #0099ee;
+	height:30px;
+	line-height: 30px;
+	flex:1;
+}
+.tab.active{
+	background: #0099ee;
+	color:#fff;
+}
+.tabmenu
+{
+	display: flex;
+	justify-content: space-between;
+	background: #fff;
+}
+.tab.left
+{
+	border-radius: 15px;
+	border-right: none;
+	border-top-right-radius: 0;
+	border-bottom-right-radius: 0;
+}
+.tab.center
+{
+	border-radius: 0px;
+}
+.tab.right
+{
+	border-radius: 15px;
+	border-left: none;
+	border-top-left-radius: 0;
+	border-bottom-left-radius: 0;
+}
